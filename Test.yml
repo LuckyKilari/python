@@ -7,7 +7,7 @@ services:
 
   prepare: 
 
-  - ssh ubuntu@54.242.114.239 -i keys/certificate.pem
+  - ssh ubuntu@192.168.0.130 -i keys/certificate.pem
 
   - bash startAgent.sh
 
@@ -30,7 +30,7 @@ services:
 
   server-agent:
 
-  - address: 54.242.114.239
+  - address: 192.168.0.130
 
     metrics:
 
@@ -49,4 +49,4 @@ services:
 
     My Message: CPU on local server>20 for 7s, stop as failed
 
-    subject: 54.242.114.239/cpu
+    subject: 192.168.0.130/cpu
