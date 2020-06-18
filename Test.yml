@@ -1,0 +1,52 @@
+---
+
+services:
+
+
+- module: shellexec
+
+  prepare: 
+
+  - ssh ubuntu@54.242.114.239 -i keys/certificate.pem
+
+  - bash startAgent.sh
+
+  - wget http://www.openss7.org/repos/csv_files/hosts.csv
+
+  - sort -R hosts.csv > random_hosts.csv
+
+  shutdown:
+
+  - echo "shutdown time is $(date)" >> tmp/my_log.txt
+
+  post-process:
+
+  - echo "this is a post process" >> tmp/my_log.txt
+
+  - mail -a /taurus/bzt.log -s “my_taurus_log_file“ user@example.com < tmp/my_log.txt
+
+
+- module: monitoring
+
+  server-agent:
+
+  - address: 54.242.114.239
+
+    metrics:
+
+    - cpu
+
+    - disks
+
+    - memory
+
+
+- module: passfail
+
+  criteria:
+
+  - class: bzt.modules.monitoring.MonitoringCriteria
+
+    My Message: CPU on local server>20 for 7s, stop as failed
+
+    subject: 54.242.114.239/cpu
